@@ -6,6 +6,8 @@ import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import reducers from './reducers';
 import registerServiceWorker from './registerServiceWorker';
+import './config';
+import AuthRoute from './component/auth-route/auth-route';
 import Login from "./container/login/login";
 import Register from "./container/register/register";
 
@@ -18,6 +20,7 @@ ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <div>
+                <AuthRoute></AuthRoute>
                 <Route path="/login" component={Login}></Route>
                 <Route path="/register" component={Register}></Route>
             </div>

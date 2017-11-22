@@ -1,26 +1,49 @@
 import React from 'react';
-import {List, Button, WingBlank, WhiteSpace, InputItem, Radio} from 'antd-mobile';
+import {List, Button, WingBlank, WhiteSpace, InputItem} from 'antd-mobile';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+import {validateLogin} from '../../redux/user.redux';
 import Logo from '../../component/logo/logo';
 
-const RadioItem = Radio.RadioItem;
+@connect(state => state.user, {validateLogin})
 class Login extends React.Component{
+    constructor(props){
+        super(props);
+        this.skipToRegister = this.skipToRegister.bind(this);
+        this.state = {
+            userName: '',
+            password: ''
+        }
+    }
+
+    handleChange(key,value){
+        this.setState({
+            [key]: value
+        })
+    }
+
+    handleLogin(){
+        this.props.validateLogin(this.state);
+    }
+
+    skipToRegister(){
+        this.props.history.push('/register');
+    }
+
     render(){
         return(
             <div>
+                {this.props.rediectTo ? <Redirect to={this.props.rediectTo}></Redirect> : null}
                 <Logo></Logo>
                 <WingBlank>
                     <List>
-                        <InputItem>账号</InputItem>
-                        <InputItem>密码</InputItem>
-                    </List>
-                    <List>
-                        <RadioItem>牛人</RadioItem>
-                        <RadioItem defaultChecked>BOSS</RadioItem>
+                        <InputItem onChange={(value)=>this.handleChange('userName',value)}>账号</InputItem>
+                        <InputItem type="password" onChange={(value)=>this.handleChange('password',value)}>密码</InputItem>
                     </List>
                     <WhiteSpace></WhiteSpace>
-                    <Button type="primary">登录</Button>
+                    <Button type="primary" onClick={()=>this.handleLogin()}>登录</Button>
                     <WhiteSpace></WhiteSpace>
-                    <Button type="primary">注册</Button>
+                    <Button type="primary" onClick={this.skipToRegister}>注册</Button>
                 </WingBlank>
             </div>
         )
