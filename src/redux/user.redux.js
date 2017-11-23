@@ -2,12 +2,11 @@ import axios from 'axios';
 import {Toast} from 'antd-mobile';
 import {getRedirectPath} from '../util';
 
-const REGISTER_SUCCESS = Symbol('REGISTER_SUCCESS');
-const LOGIN_SUCCESS = Symbol('LOGIN_SUCCESS');
+const AUTH_SUCCESS = Symbol('AUTH_SUCCESS');
 const ERROR_MESSAGE = Symbol('ERROR_MESSAGE');
+const LOAD_DATA = Symbol('LOAD_DATA');
 
 const initState = {
-    isAuth: '',
     rediectTo:'',
     errMsg:'',
     userName: '',
@@ -18,26 +17,22 @@ const initState = {
 // 注册对应的reducer处理函数
 export function user(state = initState, action) {
     switch (action.type){
-        case REGISTER_SUCCESS:
+        case LOAD_DATA:
+            return {
+                ...state,
+                errMsg: '',
+                ...action.data
+            }
+        case AUTH_SUCCESS:
             return{
                 ...state,
-                isAuth: true,
                 rediectTo: getRedirectPath(action.data),
                 errMsg: '',
                 ...action.data
             };
-        case LOGIN_SUCCESS:
-            return{
-                ...state,
-                isAuth: true,
-                rediectTo: getRedirectPath(action.data),
-                errorMessage: '',
-                ...action.data
-            }
         case ERROR_MESSAGE:
             return{
                 ...state,
-                isAuth: false,
                 errMsg: action.errMsg
             };
         default:
@@ -45,21 +40,21 @@ export function user(state = initState, action) {
     }
 }
 
-//注册成功对应的action
-export function registerSuccess(data) {
+//缓存加载数据对应的action
+export function loadData(data) {
     return{
-        type: REGISTER_SUCCESS,
+        type: LOAD_DATA,
         data
     }
 }
 
-//登录成功对应的action
-export function loginSuccess(data) {
+export function authSuccess(data) {
     return{
-        type: LOGIN_SUCCESS,
+        type: AUTH_SUCCESS,
         data
     }
 }
+
 
 //登录或注册失败对应的action
 export function errorMessage(errMsg) {
@@ -87,7 +82,7 @@ export function validateRegister({userName,password,confirmPwd,type}){
             .then(res => {
                 if(res.status === 200 && res.data.code === 0){
                     Toast.success('注册成功')
-                    dispatch(registerSuccess({userName,password,type}));
+                    dispatch(authSuccess(res.data.result));
                 }else{
                     Toast.fail(res.data.errMsg);
                     dispatch(errorMessage(res.data.errMsg));
@@ -110,9 +105,23 @@ export function validateLogin({userName, password}) {
                 console.log(res.data);
                 if(res.status === 200 && res.data.code === 0){
                     Toast.success('登录成功');
-                    dispatch(loginSuccess(res.data.data));
+                    dispatch(authSuccess(res.data.result));
                 }else{
                     Toast.fail(res.data.errMsg);
+                    dispatch(errorMessage(res.data.errMsg));
+                }
+            })
+    }
+}
+
+//更新个人信息
+export function update(data) {
+    return dispatch => {
+        axios.post('/user/update',data)
+            .then(res => {
+                if(res.status === 200 && res.status.code === 0){
+                    dispatch(authSuccess(res.data.result));
+                }else{
                     dispatch(errorMessage(res.data.errMsg));
                 }
             })

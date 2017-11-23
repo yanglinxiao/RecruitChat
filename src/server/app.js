@@ -8,9 +8,9 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.get('/',(req,res) => {
-    res.send('hello world');
-})
+// app.get('/',(req,res) => {
+//     res.send('hello world');
+// })
 
 app.use('/user',userRouter);
 
