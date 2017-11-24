@@ -11,10 +11,10 @@ const _filter = {
 }
 
 Router.get('/list',(req,res) => {
-    //User.remove({},()=>{});
-    User.find({},(err,result) => {
+    const {type} = req.query;
+    User.find({type},_filter,(err,result) => {
         if(err) throw err;
-        return res.json(result);
+        return res.json({code:0,result});
     })
 })
 

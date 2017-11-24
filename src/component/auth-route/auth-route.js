@@ -18,7 +18,7 @@ class AuthRoute extends React.Component{
                 if (res.status === 200){
                     if(!res.data.code){
                         //已经登录
-                        loadData(res.data.doc);
+                        loadData(res.data.result);
                     }else{
                         history.push('/login');
                     }

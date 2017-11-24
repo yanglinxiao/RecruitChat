@@ -10,7 +10,6 @@ const initState = {
     rediectTo:'',
     errMsg:'',
     userName: '',
-    password: '',
     type: ''
 };
 
@@ -48,6 +47,7 @@ export function loadData(data) {
     }
 }
 
+//登录注册完善信息对应的action
 export function authSuccess(data) {
     return{
         type: AUTH_SUCCESS,
@@ -119,7 +119,8 @@ export function update(data) {
     return dispatch => {
         axios.post('/user/update',data)
             .then(res => {
-                if(res.status === 200 && res.status.code === 0){
+                console.log(res.data);
+                if(res.status === 200 && res.data.code === 0){
                     dispatch(authSuccess(res.data.result));
                 }else{
                     dispatch(errorMessage(res.data.errMsg));

@@ -1,0 +1,10 @@
+.dashboard .am-navbar{
+    position: fixed;
+    width: 100%;
+    top:0;
+}
+
+.dashboard .am-tab-bar-bar{
+    position: fixed;
+    bottom: 0;
+}
