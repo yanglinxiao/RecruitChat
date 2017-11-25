@@ -5,18 +5,11 @@ import { NavBar } from 'antd-mobile';
 import Tabs from '../../component/tabs/tabs';
 import './dashboard.css';
 import Boss from '../../component/boss/boss';
-
-
-function Genius() {
-    return <h3>Genius页面</h3>
-}
+import Genius from '../../component/genius/genius';
+import My from '../../component/my/my';
 
 function Message() {
     return <h3>信息页面</h3>
-}
-
-function My() {
-    return <h3>我的页面</h3>
 }
 
 @connect(state => state)

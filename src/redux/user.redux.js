@@ -4,10 +4,11 @@ import {getRedirectPath} from '../util';
 
 const AUTH_SUCCESS = Symbol('AUTH_SUCCESS');
 const ERROR_MESSAGE = Symbol('ERROR_MESSAGE');
+const LOGOUT = Symbol('LOGOUT');
 const LOAD_DATA = Symbol('LOAD_DATA');
 
 const initState = {
-    rediectTo:'',
+    redirectTo:'',
     errMsg:'',
     userName: '',
     type: ''
@@ -25,7 +26,7 @@ export function user(state = initState, action) {
         case AUTH_SUCCESS:
             return{
                 ...state,
-                rediectTo: getRedirectPath(action.data),
+                redirectTo: getRedirectPath(action.data),
                 errMsg: '',
                 ...action.data
             };
@@ -34,10 +35,15 @@ export function user(state = initState, action) {
                 ...state,
                 errMsg: action.errMsg
             };
+        case LOGOUT:
+            return{
+                ...initState,redirectTo:'/login'
+            }
         default:
             return state;
     }
 }
+
 
 //缓存加载数据对应的action
 export function loadData(data) {
@@ -63,6 +69,16 @@ export function errorMessage(errMsg) {
         errMsg
     }
 }
+
+/**
+ 退出登录对应的action
+ */
+export function logout() {
+    return{
+        type: LOGOUT
+    }
+}
+
 
 //验证注册的信息
 export function validateRegister({userName,password,confirmPwd,type}){

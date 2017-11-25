@@ -34,7 +34,7 @@ class BossInfo extends React.Component{
         const path  = this.props.location.pathname;
         return(
             <div>
-                {this.props.rediectTo && this.props.rediectTo !== path ? <Redirect to={this.props.rediectTo}></Redirect> : null}
+                {this.props.redirectTo && this.props.redirectTo !== path ? <Redirect to={this.props.redirectTo}></Redirect> : null}
                 <NavBar mode="dark">BOSS信息完善页</NavBar>
                 <AvatarSelector selectAvatar={(el)=>this.setState({avatar:el.text})}></AvatarSelector>
                 <InputItem onChange={(value)=>this.handleChange('title',value)}>职位名称</InputItem>

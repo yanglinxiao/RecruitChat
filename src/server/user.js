@@ -71,10 +71,8 @@ Router.get('/login',(req,res) => {
                 return res.json({code:1, errMsg: '账号或密码有误'})
             }else{
                 res.cookie('userid',result._id);
-                result = Object.assign({},{
-                    userName: result.userName,
-                    type: result.type
-                })
+                const {userName,type,avatar,desc,company,money} = result;
+                result = Object.assign({},{userName, type, avatar,desc,company,money})
                 return res.json({code:0,result});
             }
         })

@@ -31,7 +31,7 @@ class GeniusInfo extends React.Component{
         const path  = this.props.location.pathname;
         return(
             <div>
-                {this.props.rediectTo && this.props.rediectTo !== path ? <Redirect to={this.props.rediectTo}></Redirect> : null}
+                {this.props.redirectTo && this.props.redirectTo !== path ? <Redirect to={this.props.redirectTo}></Redirect> : null}
                 <NavBar mode="dark">牛人信息完善页</NavBar>
                 <AvatarSelector selectAvatar={(el)=>this.setState({avatar:el.text})}></AvatarSelector>
                 <InputItem onChange={(value)=>this.handleChange('title',value)}>求职岗位</InputItem>
