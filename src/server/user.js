@@ -2,22 +2,15 @@ const express = require('express');
 const model = require('./model');
 const util = require('./util');
 const User = model.getModel('user');
+const Chat = model.getModel('chat');
 
 const Router = express.Router();
 const _filter = {
     password: 0,
-    '__v': 0,
-    '_id': 0
+    '__v': 0
 }
 
-Router.get('/list',(req,res) => {
-    const {type} = req.query;
-    User.find({type},_filter,(err,result) => {
-        if(err) throw err;
-        return res.json({code:0,result});
-    })
-})
-
+//验证是否携带cookie
 Router.get('/info',(req,res) => {
     const {userid} = req.cookies;
     if(userid){
@@ -71,8 +64,8 @@ Router.get('/login',(req,res) => {
                 return res.json({code:1, errMsg: '账号或密码有误'})
             }else{
                 res.cookie('userid',result._id);
-                const {userName,type,avatar,desc,company,money} = result;
-                result = Object.assign({},{userName, type, avatar,desc,company,money})
+                // const {userName,type,avatar,desc,company,money} = result;
+                // result = Object.assign({},{userName, type, avatar,desc,company,money})
                 return res.json({code:0,result});
             }
         })
@@ -96,6 +89,24 @@ Router.post('/update',(req,res) => {
             },body)
             return res.json({code:0,result})
         }
+    })
+})
+
+//获取用户列表
+Router.get('/list',(req,res) => {
+    const {type} = req.query;
+    User.find({type},_filter,(err,result) => {
+        if(err) throw err;
+        return res.json({code:0,result});
+    })
+})
+
+//获取聊天内容
+Router.get('/getMsgList',(req,res) => {
+    const {userid} = req.cookies;
+    Chat.find({},(err,result) => {
+        if (err) throw err;
+        return res.json({code:0,result})
     })
 })
 

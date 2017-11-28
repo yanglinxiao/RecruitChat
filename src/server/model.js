@@ -13,7 +13,14 @@ const models = {
         company: {type: String},
         money: {type: String}
     },
-    chat:{}
+    chat:{
+        chatid: {type: String,reuqire: true},
+        from: {type: String, require: true},
+        to: {type: String, require: true},
+        content: {type: String, require: true, default:''},
+        read: {type: Boolean, require: true},
+        create_time:{type: Number, require: true, default:new Date().getTime()}
+    }
 }
 
 for(let key of Object.keys(models)){

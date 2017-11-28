@@ -118,7 +118,6 @@ export function validateLogin({userName, password}) {
     return dispatch => {
         axios.get('/user/login',{params:{userName, password}})
             .then(res => {
-                console.log(res.data);
                 if(res.status === 200 && res.data.code === 0){
                     Toast.success('登录成功');
                     dispatch(authSuccess(res.data.result));
@@ -135,7 +134,6 @@ export function update(data) {
     return dispatch => {
         axios.post('/user/update',data)
             .then(res => {
-                console.log(res.data);
                 if(res.status === 200 && res.data.code === 0){
                     dispatch(authSuccess(res.data.result));
                 }else{

@@ -12,6 +12,7 @@ import Login from "./container/login/login";
 import Register from "./container/register/register";
 import GeniusInfo from './container/geniusinfo/geniusinfo';
 import BossInfo from './container/bossinfo/bossinfo';
+import Chat from './component/chat/chat';
 import DashBoard from './container/dashboard/dashboard';
 
 const store = createStore(reducers,compose(
@@ -29,6 +30,7 @@ ReactDOM.render(
                     <Route path="/register" component={Register}></Route>
                     <Route path="/geniusinfo" component={GeniusInfo}></Route>
                     <Route path="/bossinfo" component={BossInfo}></Route>
+                    <Route path="/chat/:userid" component={Chat}></Route>
                     <Route component={DashBoard}></Route>
                 </Switch>
             </div>

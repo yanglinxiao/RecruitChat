@@ -1,36 +1,75 @@
 import axios from 'axios';
+import io from 'socket.io-client';
 
-const USER_LIST = Symbol('USER_LIST');
-
+const MSG_LIST = Symbol('MSG_LIST');//获取消息列表
+const MSG_REC = Symbol('MSG_RECIEVE');//接收消息
+const MSG_READ = Symbol('MSG_READ');//标记消息读取情况
+const socket = io('ws://localhost:1234');
 const initState = {
-    userList: []
+    chatMsgList: [],
+    unread: 0
 }
 
 export function chat(state=initState,action) {
     switch (action.type){
-        case USER_LIST:
+        case MSG_LIST:
             return{
-                ...state,userList: action.data
+                ...state,
+                chatMsgList: action.msgList,
+                unread: action.msgList.filter(msg => !msg.read).length
+            }
+        case MSG_REC:
+            return{
+                ...state,
+                chatMsgList: [...state.chatMsgList,action.msgRec],
+                unread: state.unread + 1
+            }
+        case MSG_READ:
+            return{
+                ...state
             }
         default:
             return state
     }
 }
 
-export function userList(data) {
-    return{
-        type: USER_LIST,
-        data
+export function msgList(msgList) {
+    return {
+        type: MSG_LIST,
+        msgList
     }
 }
 
-export function getUserList(type) {
+export function msgRec(msgRec) {
+    return{
+        type: MSG_REC,
+        msgRec
+    }
+}
+
+export function recMsg() {
     return dispatch => {
-        axios.get('user/list',{params:{type}})
+        socket.on('recMsg',(msg) => {
+            dispatch(msgRec(msg));
+        })
+    }
+}
+
+export function sendMsg({from,to,msg}) {
+    return dispatch => {
+        socket.emit('sendMsg',{from,to,msg});
+    }
+}
+
+export function getMsgList() {
+    return dispatch => {
+        axios.get('/user/getMsgList')
             .then(res => {
                 if(res.status === 200 && res.data.code === 0){
-                    dispatch(userList(res.data.result));
+                    dispatch(msgList(res.data.result));
                 }
             })
     }
 }
+
+

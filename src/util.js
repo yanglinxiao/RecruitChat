@@ -1,4 +1,9 @@
-
+/**
+ *
+ * @param type:用户类型
+ * @param avatar:用户头像
+ * @returns {string}:下一个要跳转到的页面地址
+ */
 export function getRedirectPath({type,avatar}){
     let url = (type === "boss") ? '/boss' : '/genius';
     if(!avatar){

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, WingBlank, WhiteSpace } from 'antd-mobile';
+import { withRouter} from 'react-router-dom';
 
+@withRouter
 class UserCard extends React.Component{
     render(){
         const CardHeader = Card.Header;
@@ -11,7 +13,7 @@ class UserCard extends React.Component{
                     return (user.avatar ?
                         <div key={index}>
                             <WhiteSpace></WhiteSpace>
-                            <Card>
+                            <Card onClick={()=>this.props.history.push(`/chat/${user._id}`)}>
                                 <CardHeader title={user.userName}
                                             thumb={require(`../img/${user.avatar}.png`)}
                                             extra={user.title}>

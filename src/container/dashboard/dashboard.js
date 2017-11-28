@@ -47,8 +47,8 @@ class DashBoard extends React.Component{
                 title: '个人中心',
                 component: My
             }
-        ]
-        const title = navList.find(nav => nav.path === location.pathname).title;
+        ];
+        const title = location.pathname !== '/' ? navList.find(nav => nav.path === location.pathname).title : '';
         return(
             <div className="dashboard">
                 <NavBar mode="dark">{title}</NavBar>
