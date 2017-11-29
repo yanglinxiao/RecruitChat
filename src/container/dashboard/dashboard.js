@@ -7,13 +7,20 @@ import './dashboard.css';
 import Boss from '../../component/boss/boss';
 import Genius from '../../component/genius/genius';
 import My from '../../component/my/my';
+import Message from '../../component/message/message';
+import {getMsgList, recMsg} from "../../redux/chat.redux";
 
-function Message() {
-    return <h3>信息页面</h3>
-}
-
-@connect(state => state)
+@connect(state => state, {getMsgList,recMsg})
 class DashBoard extends React.Component{
+
+    //获取消息列表和监听消息的接受
+    componentDidMount(){
+        if(!this.props.chat.chatMsgList.length){
+            this.props.getMsgList();
+            this.props.recMsg();
+        }
+    }
+
     render(){
         const {user,location} = this.props;
         const navList = [

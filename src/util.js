@@ -12,3 +12,12 @@ export function getRedirectPath({type,avatar}){
     return url;
 }
 
+/**
+ *
+ * @param userid:自身id
+ * @param targetid:对方id
+ * @returns {string}:聊天id
+ */
+export function getChatId(userid,targetid) {
+    return [userid,targetid].sort().join('_');
+}

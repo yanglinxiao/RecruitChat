@@ -16,13 +16,15 @@ export function chat(state=initState,action) {
             return{
                 ...state,
                 chatMsgList: action.msgList,
-                unread: action.msgList.filter(msg => !msg.read).length
+                unread: action.msgList.filter(msg => !msg.read && msg.to === action.allState.user._id).length,
+                userList: action.userList
             }
         case MSG_REC:
+            const num = action.msgRec.to === action.allState.user._id ? 1 : 0;
             return{
                 ...state,
                 chatMsgList: [...state.chatMsgList,action.msgRec],
-                unread: state.unread + 1
+                unread: state.unread + num
             }
         case MSG_READ:
             return{
@@ -33,24 +35,27 @@ export function chat(state=initState,action) {
     }
 }
 
-export function msgList(msgList) {
+export function msgList(msgList,userList,allState) {
     return {
         type: MSG_LIST,
-        msgList
+        msgList,
+        userList,
+        allState
     }
 }
 
-export function msgRec(msgRec) {
+export function msgRec(msgRec,allState) {
     return{
         type: MSG_REC,
-        msgRec
+        msgRec,
+        allState
     }
 }
 
 export function recMsg() {
-    return dispatch => {
+    return (dispatch,getState) => {
         socket.on('recMsg',(msg) => {
-            dispatch(msgRec(msg));
+            dispatch(msgRec(msg,getState()));
         })
     }
 }
@@ -62,11 +67,11 @@ export function sendMsg({from,to,msg}) {
 }
 
 export function getMsgList() {
-    return dispatch => {
+    return (dispatch,getState) => {
         axios.get('/user/getMsgList')
             .then(res => {
                 if(res.status === 200 && res.data.code === 0){
-                    dispatch(msgList(res.data.result));
+                    dispatch(msgList(res.data.result,res.data.userList,getState()));
                 }
             })
     }

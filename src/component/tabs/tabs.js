@@ -2,8 +2,10 @@ import React from 'react';
 import { TabBar } from 'antd-mobile';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 @withRouter
+@connect(state => state.chat)
 class Tabs extends React.Component{
 
     static propTypes = {
@@ -12,7 +14,7 @@ class Tabs extends React.Component{
 
     render(){
         const TabBarItem = TabBar.Item;
-        const {location,history} = this.props;
+        const {location,history,unread} = this.props;
         let tabList = this.props.tabList.filter(tab => !tab.hide);
         const TabItem = tabList.map((tab,index) => {
             return (<TabBarItem key={index}
@@ -20,7 +22,8 @@ class Tabs extends React.Component{
                                 icon={{uri: require(`./img/${tab.icon}.png`)}}
                                 selectedIcon={{uri: require(`./img/${tab.icon}-active.png`)}}
                                 selected={tab.path === location.pathname}
-                                onPress={()=>history.push(tab.path)}>
+                                onPress={()=>history.push(tab.path)}
+                                badge={tab.path === '/message' ? unread : 0}>
             </TabBarItem>)
         })
         return(

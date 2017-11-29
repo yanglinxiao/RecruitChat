@@ -1,5 +1,34 @@
-.input-footer{
+.chat-page .am-navbar{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.chat-page .am-list{
+    margin-top: 45px;
+}
+
+.others .am-list-line .am-list-content{
+    text-align: left;
+}
+
+.myself .am-list-line .am-list-content{
+    text-align: right;
+}
+
+.myself .am-list-line .am-list-extra{
+    flex-basis: auto;
+    margin-left: 15px;
+}
+
+.chat-page .input-footer{
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 2;
+}
+
+.input-footer .am-grid .am-flexbox .am-flexbox-item .am-grid-item-content .am-grid-item-inner-content .am-grid-text{
+    margin-top: 0;
 }

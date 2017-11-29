@@ -104,9 +104,18 @@ Router.get('/list',(req,res) => {
 //获取聊天内容
 Router.get('/getMsgList',(req,res) => {
     const {userid} = req.cookies;
-    Chat.find({},(err,result) => {
-        if (err) throw err;
-        return res.json({code:0,result})
+    User.find({},(err,userResult) => {
+        const userList = {};
+        userResult.forEach((user) => {
+            userList[user._id] = {
+                userName: user.userName,
+                avatar: user.avatar
+            }
+        })
+        Chat.find({'$or':[{from:userid},{to:userid}]},(err,result) => {
+            if (err) throw err;
+            return res.json({code:0,result,userList})
+        })
     })
 })
 

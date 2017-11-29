@@ -12,11 +12,13 @@ io.on('connection',(socket) => {
     socket.on('sendMsg',(data) => {
         const {from,to,msg} = data;
         const chatid = [from,to].sort().join('_');
-        Chat.create({chatid,from,to,content:msg},(err,result) => {
+        Chat.create({chatid,from,to,content:msg,create_time:new Date().getTime()},(err,result) => {
             io.emit('recMsg',Object.assign({},result._doc));
         })
     })
 })
+
+  // Chat.remove({},(err,data)=>{});
 
 app.use(cookieParser());
 app.use(bodyParser.json());
