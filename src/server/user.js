@@ -92,7 +92,7 @@ Router.post('/update',(req,res) => {
     })
 })
 
-//获取用户列表
+//获取用户列表接口
 Router.get('/list',(req,res) => {
     const {type} = req.query;
     User.find({type},_filter,(err,result) => {
@@ -101,7 +101,7 @@ Router.get('/list',(req,res) => {
     })
 })
 
-//获取聊天内容
+//获取聊天内容接口
 Router.get('/getMsgList',(req,res) => {
     const {userid} = req.cookies;
     User.find({},(err,userResult) => {
@@ -117,6 +117,23 @@ Router.get('/getMsgList',(req,res) => {
             return res.json({code:0,result,userList})
         })
     })
+})
+
+//更新已读消息接口
+Router.post('/readMsg',(req,res) => {
+    const {userid} = req.cookies;
+    const {from} = req.body;
+    Chat.update(
+        {from,to: userid},
+        {'$set':{read:true}},
+        {'multi':true},
+        (err,result) =>{
+            if(err) res.json({code:1,errMsg:'后端出错了'});
+            console.log(result);
+            if(result){
+                res.json({code:0,result: {modifyNum:result.nModified}})
+            }
+        })
 })
 
 module.exports = Router;

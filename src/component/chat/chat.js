@@ -2,11 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {List, InputItem, NavBar, Icon, Grid} from 'antd-mobile';
 import {withRouter} from 'react-router-dom';
-import {getMsgList, recMsg, sendMsg} from '../../redux/chat.redux';
+import {getMsgList, recMsg, sendMsg, readMsg} from '../../redux/chat.redux';
 import './chat.css';
 import {getChatId} from "../../util";
 
-@connect(state => state, {getMsgList,recMsg,sendMsg})
+@connect(state => state, {getMsgList,recMsg,sendMsg, readMsg})
 @withRouter
 class Chat extends React.Component{
 
@@ -18,15 +18,27 @@ class Chat extends React.Component{
         }
     }
 
-    //获取消息列表和监听消息的接受
+    /*
+     获取消息列表
+     监听消息的接收
+     把消息已读数更新
+     */
     componentDidMount(){
         if(!this.props.chat.chatMsgList.length){
             this.props.getMsgList();
             this.props.recMsg();
         }
-        this.emitResizeEvent();
+        const to = this.props.match.params.userid;
+        this.props.readMsg(to);
     }
 
+    // 把消息已读数更新，避免返回消息页面有本次聊天组的信息提示badge
+    componentWillUnmount(){
+        const to = this.props.match.params.userid;
+        this.props.readMsg(to);
+    }
+
+    //手动派发resize event，调整后emoji表情显示的bug
     emitResizeEvent(){
         setTimeout(() => {
             window.dispatchEvent(new Event('resize'));
@@ -48,10 +60,9 @@ class Chat extends React.Component{
             .filter(emoji => emoji)
             .map(emoji => ({text: emoji}));
         const Item = List.Item;
-        const {userid} = this.props.match.params;
-        const chatid = getChatId(userid,this.props.user._id);
         let {userList,chatMsgList} = this.props.chat;
-        chatMsgList = chatMsgList.filter((chatMsg) => chatMsg.chatid === chatid);
+        //根据chatid筛选指定聊天组的聊天内容进行展示
+        chatMsgList = chatMsgList.filter((chatMsg) => chatMsg.chatid === getChatId(this.props.match.params,this.props.user._id));
         return userList ? (
                 <div className="chat-page">
                     <NavBar icon={<Icon type="left"/>}
