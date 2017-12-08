@@ -6,6 +6,7 @@ const initState = {
     userList: []
 }
 
+//处理用户列表的reducer
 export function chatUser(state=initState,action) {
     switch (action.type){
         case USER_LIST:
@@ -17,6 +18,7 @@ export function chatUser(state=initState,action) {
     }
 }
 
+//获取用户列表的action
 export function userList(data) {
     return{
         type: USER_LIST,
@@ -24,6 +26,7 @@ export function userList(data) {
     }
 }
 
+//异步派发获取用户列表的action
 export function getUserList(type) {
     return dispatch => {
         axios.get('user/list',{params:{type}})

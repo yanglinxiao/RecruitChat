@@ -60,9 +60,10 @@ class Chat extends React.Component{
             .filter(emoji => emoji)
             .map(emoji => ({text: emoji}));
         const Item = List.Item;
+        const {userid} = this.props.match.params;
         let {userList,chatMsgList} = this.props.chat;
         //根据chatid筛选指定聊天组的聊天内容进行展示
-        chatMsgList = chatMsgList.filter((chatMsg) => chatMsg.chatid === getChatId(this.props.match.params,this.props.user._id));
+        chatMsgList = chatMsgList.filter((chatMsg) => chatMsg.chatid === getChatId(userid,this.props.user._id));
         return userList ? (
                 <div className="chat-page">
                     <NavBar icon={<Icon type="left"/>}
@@ -88,7 +89,7 @@ class Chat extends React.Component{
                                         <span style={{lineHeight: 'normal'}} onClick={()=>{
                                             this.setState({showEmoji:!this.state.showEmoji});
                                             this.emitResizeEvent();
-                                        }}>😀</span>
+                                        }}>{'😀'}</span>
                                         <span onClick={()=>this.handleSubmit()}>发送</span>
                                     </div>
                                 }>
